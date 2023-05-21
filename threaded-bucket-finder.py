@@ -25,7 +25,10 @@ def check_bucket(line, queue):
             r = s.head("http://{}.s3.amazonaws.com".format(line.strip()), headers=headers, timeout=10)
         if r.status_code == 200:
             if args.list:
-                r = s.get("http://{}.s3.amazonaws.com".format(line.strip()), headers=headers, timeout=10)
+                if useProxy:
+                    r = s.get("http://{}.s3.amazonaws.com".format(line.strip()), headers=headers, proxies=proxies, timeout=10)
+                else:
+                    r = s.get("http://{}.s3.amazonaws.com".format(line.strip()), headers=headers, timeout=10)
                 tree = ElementTree.fromstring(r.content)
                 for node in tree.iter():
                     if "Contents" in node.tag:
