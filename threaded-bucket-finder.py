@@ -20,8 +20,9 @@ def check_bucket(line, queue):
     if line.strip():
         s = requests.Session()
         if useProxy:
-            s.proxies.update(proxies)
-        r = s.head("http://{}.s3.amazonaws.com".format(line.strip()), headers=headers, timeout=10)
+            r = s.head("http://{}.s3.amazonaws.com".format(line.strip()), headers=headers, proxies=proxies, timeout=10)
+        else:
+            r = s.head("http://{}.s3.amazonaws.com".format(line.strip()), headers=headers, timeout=10)
         if r.status_code == 200:
             if args.list:
                 r = s.get("http://{}.s3.amazonaws.com".format(line.strip()), headers=headers, timeout=10)
